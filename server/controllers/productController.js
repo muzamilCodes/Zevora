@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const { Product } = require("../models/productModel");
 const cloudinary = require("../utilities/cloudinary");
 const { resHandler } = require("../utilities/resHandler");
@@ -149,6 +150,10 @@ exports.getAllProducts = async (req, res) => {
 exports.getProductById = async (req, res) => {
   try {
     const { productId } = req.params;
+
+    if (!productId || !mongoose.isValidObjectId(productId)) {
+      return resHandler(res, 404, "Product not Found!");
+    }
 
     const product = await Product.findById(productId);
 
